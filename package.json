@@ -1,0 +1,17 @@
+{
+  "name": "fullstack-21-part8-graphql-exercises",
+  "version": "1.0.0",
+  "description": "",
+  "main": "library-backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.6.2",
+    "apollo-server-core": "^3.6.2",
+    "graphql": "^16.3.0",
+    "nodemon": "^2.0.15"
+  }
+}
