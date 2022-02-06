@@ -1,2 +1,2 @@
-# fullstackopen-2021-part8-library-frontend
+# fullstackopen-2021-part8-library-backend
 
