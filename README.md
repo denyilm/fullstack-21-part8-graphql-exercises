@@ -1,1 +1,2 @@
-# fullstack-21-part8-graphql-exercises
+# fullstackopen-2021-part8-library-frontend
+
