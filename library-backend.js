@@ -6,6 +6,7 @@ const config = require('./utils/config')
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
+const author = require('./models/author')
 
 /*
  * Suomi:
@@ -70,11 +71,22 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-      bookCount: () => authors.length,
-      authorCount: () => books.length,
-      //allBooks: (root, args) => books.filter(b => b.genres.includes(args.genre)),
-      allBooks: () => Book.find({}),
-      allAuthors: () => Author.find({})
+      bookCount: () => Book.collection.countDocuments(),
+      authorCount: () => Author.collection.countDocuments(),
+      allBooks: async (root, args) => {
+        let authors =  await Author.find({}) 
+    
+        if(!args.genre){
+          let booksWithAuthorId = await Book.find({})
+          let books = booksWithAuthorId.map(b => ({...b._doc, author: authors.find(a => String(a._id) === String(b.author)).name}))
+          console.log(books)
+          return books
+        }
+        let booksWithAuthorId = await Book.find({genres:{$in:[args.genre]}})
+        let books = booksWithAuthorId.map(b => ({...b._doc, author: authors.find(a => String(a._id) === String(b.author)).name}))
+        return books
+      },
+      allAuthors: async () => await Author.find({})
   },
   Author: {
       bookCount: (root) => {
@@ -84,14 +96,6 @@ const resolvers = {
   },
   Mutation: {
       addBook: async (root, args) => {
-          // const book = {...args, id: uuid()}
-          // books.push(book)
-          // if(!authors.includes(book.author)){
-          //     let author = {name: book.author}
-          //     authors.push(author)
-          // }
-          // const book = new Book({...args})
-
           const book = new Book({...args})
           let author =  await Author.find({name: args.author})
           book.author = author[0]._id
