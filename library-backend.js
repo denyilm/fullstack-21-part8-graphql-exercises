@@ -148,8 +148,6 @@ const resolvers = {
 
           const author = await Author.findOne({ name: args.name })
 
-          // console.log(author)
-
           if(!author){
               return null
           }
