@@ -101,7 +101,7 @@ const resolvers = {
         if(!args.genre){
           let booksWithAuthorId = await Book.find({})
           let books = booksWithAuthorId.map(b => ({...b._doc, author: authors.find(a => String(a._id) === String(b.author)).name}))
-          console.log(books)
+          // console.log(books)
           return books
         }
         let booksWithAuthorId = await Book.find({genres:{$in:[args.genre]}})
@@ -114,9 +114,9 @@ const resolvers = {
       }
   },
   Author: {
-      bookCount: (root) => {
-          let c = books.filter(b => b.author === root.name)
-          return c.length
+      bookCount: async (root) => {
+          let books = await Book.find({author: root._id})
+          return books.length
       }
   },
   Mutation: {
@@ -148,7 +148,7 @@ const resolvers = {
 
           const author = await Author.findOne({ name: args.name })
 
-          console.log(author)
+          // console.log(author)
 
           if(!author){
               return null
